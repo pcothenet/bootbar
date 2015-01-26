@@ -78,12 +78,11 @@
 
                 // Auto dismiss
                 // Bind the function to the current element (otherwise this = window)
-                var boundDismiss = this.dismiss.bind(this);
                 if (this.settings.autoDismiss) {
-                    setTimeout(boundDismiss, this.settings.dismissTimeout);
+                    setTimeout(this.dismiss(), this.settings.dismissTimeout);
                 }
             },
-            dismiss: function() {
+            hideAlert: function() {
                 var dismissEffect = this.settings.dismissEffect;
                 var dismissSpeed = this.settings.dismissSpeed;
                 var onDismiss = this.settings.onDismiss;
@@ -102,6 +101,9 @@
                         }
                     });
                 }
+            },
+            dismiss: function() {
+                this.hideAlert.call(this);
             }
         }
     });
