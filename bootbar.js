@@ -37,9 +37,9 @@
                         onDismiss: null                 // onDismiss callback
                 };
 
-                var settings = $.extend({}, defaults, options || {});
+                this.settings = $.extend({}, defaults, options || {});
 
-                var template = $("<div>" +
+                this.template = $("<div>" +
                                     "<button type=\"button\" class=\"close\" aria-hidden=\"true\">&times;</button>" +
                                 "</div>");
 
@@ -51,51 +51,57 @@
                     "z-index": 10000
                 };
 
-                template.css(alertCss);
+                this.template.css(alertCss);
 
                 // Add the class from options (if provided)
-                template.addClass("alert alert-dismissable");
-                template.addClass("alert-" + settings.barType);
-                template.addClass(settings.alertClass);
-                template.append(message);
+                this.template.addClass("alert alert-dismissable");
+                this.template.addClass("alert-" + this.settings.barType);
+                this.template.addClass(this.settings.alertClass);
+                this.template.append(message);
 
-                if (settings.autoLinkClass) {
-                    template.find("a").addClass("alert-link");
+                if (this.settings.autoLinkClass) {
+                    this.template.find("a").addClass("alert-link");
                 }
 
-                function triggerClick() {
-                    $(template).find(".close").trigger("click");
-                }
-
-                $("body").prepend(template).each(function() {
-                    if ($.isFunction(settings.onDraw)) {
-                        settings.onDraw.call(this);
+                var that = this;
+                $("body").prepend(this.template).each(function() {
+                    if ($.isFunction(that.settings.onDraw)) {
+                        that.settings.onDraw.call(this);
                     }
                 });
 
-                if (settings.autoDismiss) {
-                    setTimeout(triggerClick, settings.dismissTimeout);
-                }
+                $(this.template).find(".close").unbind("click");
 
-                $(template).find(".close").unbind("click");
-
-                $(template.find(".close")).on("click", function() {
-                    if (settings.dismissEffect === "slide") {
-                        $(template).slideUp(settings.dismissSpeed, function() {
-                            $(template).remove();
-                            if ($.isFunction(settings.onDismiss)) {
-                                settings.onDismiss.call(this);
-                            }
-                        });
-                    } else {
-                        $(template).fadeOut(settings.dismissSpeed, function() {
-                            $(template).remove();
-                            if ($.isFunction(settings.onDismiss)) {
-                                settings.onDismiss.call(this);
-                            }
-                        });
-                    }
+                $(this.template.find(".close")).on("click", function() {
+                    that.dismiss();
                 });
+
+                // Auto dismiss
+                // Bind the function to the current element (otherwise this = window)
+                var boundDismiss = this.dismiss.bind(this);
+                if (this.settings.autoDismiss) {
+                    setTimeout(boundDismiss, this.settings.dismissTimeout);
+                }
+            },
+            dismiss: function() {
+                var dismissEffect = this.settings.dismissEffect;
+                var dismissSpeed = this.settings.dismissSpeed;
+                var onDismiss = this.settings.onDismiss;
+                if (dismissEffect === "slide") {
+                    $(this.template).slideUp(dismissSpeed, function() {
+                        $(this.template).remove();
+                        if ($.isFunction(onDismiss)) {
+                            onDismiss.call(this);
+                        }
+                    });
+                } else {
+                    $(this.template).fadeOut(dismissSpeed, function() {
+                        $(this.template).remove();
+                        if ($.isFunction(onDismiss)) {
+                            onDismiss.call(this);
+                        }
+                    });
+                }
             }
         }
     });
