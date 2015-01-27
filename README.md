@@ -25,7 +25,7 @@ Notifcation bar plugin for Bootstrap + jQuery / Zepto
 
 ```javascript
 // Raise a simple info bar:
-$.bootbar.info("This is a simple info bar. Click the &times; to close.");
+$('body').bootbar.info("This is a simple info bar. Click the &times; to close.");
 
 // See also:
 // $.bootbar.show // generic call
@@ -50,25 +50,32 @@ var options = {
         onDraw: null,                   // onDraw callback
         onDismiss: null                 // onDismiss callback
 };
-
 // Feel free to change any of them to suit your needs.
-$.bootbar.show("This is a simple info bar. Click the &times; to close.", options);
+
+$('body').bootbar.show("This is a simple info bar. Click the &times; to close.", options);
 
 // onDraw is a function that fires as soon as the bar is drawn:
-$.bootbar.info("", { onDraw: function() {
+$('body').bootbar.info("", { onDraw: function() {
     alert("This alert fires as soon as the bar is drawn.");
 }});
 
 // onDismiss is a function that fires as soon as the bar is drawn:
-$.bootbar.info("", { onDismiss: function() {
+$('body').bootbar.info("", { onDismiss: function() {
     alert("This alert fires as soon as the bar is closed.");
 }});
 
 // dismissEffect supports a fade effect as well:
-$.bootbar.info("", { dismissEffect: "fade" });
+$('body').bootbar.info("", { dismissEffect: "fade" });
 
 // You can make your bars dismiss themselves on a timer:
-$.bootbar.info("", { autoDismiss: true });
+$('body').bootbar.info("", { autoDismiss: true });
+
+// You can dismiss a notification programatically
+$('bootbar-alert').bootbar.dismiss();
+
+// Or hide it (does not trigger the onDismiss function)
+// (useful if you want to transition to another notification)
+$('bootbar-alert').bootbar.hide();
 
 ```
 
