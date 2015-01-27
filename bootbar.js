@@ -1,6 +1,6 @@
 (function($){
     "use strict";
-    $.extend($, {
+    $.fn.extend({
         bootbar: {
             info: function(message, options) {
                 options = options === undefined ? {} : options;
@@ -54,7 +54,7 @@
                 this.template.css(alertCss);
 
                 // Add the class from options (if provided)
-                this.template.addClass("alert alert-dismissable");
+                this.template.addClass("bootbar-alert alert alert-dismissable");
                 this.template.addClass("alert-" + this.settings.barType);
                 this.template.addClass(this.settings.alertClass);
                 this.template.append(message);
@@ -81,8 +81,13 @@
                 if (this.settings.autoDismiss) {
                     setTimeout(this.dismiss(), this.settings.dismissTimeout);
                 }
+
+                return this;
             },
-            hideAlert: function() {
+            transitionOut: function() {
+                if (!this.settings) {
+                    return this.hideAlert();
+                }
                 var dismissEffect = this.settings.dismissEffect;
                 var dismissSpeed = this.settings.dismissSpeed;
                 var onDismiss = this.settings.onDismiss;
@@ -101,9 +106,13 @@
                         }
                     });
                 }
+                return this.hideAlert();
             },
             dismiss: function() {
-                this.hideAlert.call(this);
+                this.transitionOut.call(this);
+            },
+            hide: function() {
+                $(this.template).remove();
             }
         }
     });
