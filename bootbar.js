@@ -86,7 +86,7 @@
             },
             transitionOut: function() {
                 if (!this.settings) {
-                    return this.hideAlert();
+                    return this.transitionOut();
                 }
                 var dismissEffect = this.settings.dismissEffect;
                 var dismissSpeed = this.settings.dismissSpeed;
@@ -106,7 +106,7 @@
                         }
                     });
                 }
-                return this.hideAlert();
+                return this.transitionOut();
             },
             dismiss: function() {
                 this.transitionOut.call(this);
