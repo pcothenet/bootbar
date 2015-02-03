@@ -58,6 +58,7 @@
                 this.template.addClass("alert-" + this.settings.barType);
                 this.template.addClass(this.settings.alertClass);
                 this.template.append(message);
+                this.template.alertClass = this.settings.alertClass;
 
                 if (this.settings.autoLinkClass) {
                     this.template.find("a").addClass("alert-link");
@@ -93,14 +94,14 @@
                 var onDismiss = this.settings.onDismiss;
                 if (dismissEffect === "slide") {
                     $(this.template).slideUp(dismissSpeed, function() {
-                        $(this.template).remove();
+                        $(".bootbar-alert").remove();
                         if ($.isFunction(onDismiss)) {
                             onDismiss.call(this);
                         }
                     });
                 } else {
                     $(this.template).fadeOut(dismissSpeed, function() {
-                        $(this.template).remove();
+                        $(".bootbar-alert").remove();
                         if ($.isFunction(onDismiss)) {
                             onDismiss.call(this);
                         }
